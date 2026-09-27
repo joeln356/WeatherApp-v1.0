@@ -1,33 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="public/banner.png" alt="Weather App v1.0 Banner" width="100%"/>
+</p>
 
-## Getting Started
+<h1 align="center">Weather App v1.0</h1>
 
-First, run the development server:
+<p align="center">
+  <strong>Aplicação de clima moderna</strong> • Dados em tempo real • React + Next.js + TypeScript
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<p align="center">
+  <a href="https://joeln356.github.io/WeatherApp-v1.0/"><strong>Ver demo →</strong></a>
+  <br><br>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/API-Weather-blue?style=for-the-badge" alt="Weather API"/>
+</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🌤️ Sobre o Weather App
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O **Weather App v1.0** é uma nova versão da aplicação de clima, desenvolvida com tecnologias modernas do ecossistema React.
 
-## Learn More
+A aplicação permite consultar informações meteorológicas de diferentes cidades através de uma API de clima, apresentando os dados em uma interface moderna, responsiva e adaptada para diferentes dispositivos.
 
-To learn more about Next.js, take a look at the following resources:
+Esta versão foi desenvolvida utilizando **React, Next.js, TypeScript e Tailwind CSS**, representando uma evolução em relação à versão anterior desenvolvida com HTML, CSS e JavaScript Vanilla.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🛠️ Tecnologias Utilizadas
+
+* React
+* Next.js
+* TypeScript
+* Tailwind CSS
+* API de Clima
+* Git & GitHub
+
+---
+
+### ⚙️ Funcionalidades
+
+* 🌍 Pesquisa de cidades
+* 🌡️ Exibição da temperatura atual
+* ☁️ Condição climática atual
+* 📍 Informações de localização
+* 🌤️ Ícones e elementos visuais baseados no clima
+* 📱 Interface responsiva
+* 🎨 Interface moderna construída com Tailwind CSS
+* 🔄 Integração com API de clima em tempo real
+
+---
+
+### 📌 Versões
+
+| Versão     | Repositório                                             | Deploy                                                    |
+| ---------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| **v0.0.0** | [GitHub](https://github.com/joeln356/WeatherApp-v0.0.0) | [Ver site](https://joeln356.github.io/WeatherApp-v0.0.0/) |
+| **v1.0.0** | [GitHub](https://github.com/joeln356/WeatherApp-v1.0)   | [Ver site](https://joeln356.github.io/WeatherApp-v1.0/)   |
+
+---
+
+### 👨‍💻 Autor
+
+**Joel Ndala**
+
+Desenvolvedor Front-End • Estudante de Ciências da Computação • Entusiasta de Cybersecurity
+
+---
+
+<p align="center">
+  <strong>Weather App v1.0.0</strong>
+</p>
+
 
 ## Deploy on Vercel
 
