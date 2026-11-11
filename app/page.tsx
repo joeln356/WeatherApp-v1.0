@@ -5,6 +5,8 @@ import {useState, useEffect} from 'react';
 import Header from "./components/Header";
 import Suncicle from "./components/Suncicle";
 import Title from "./components/Title";
+import WeatherDetails from './components/WeatherDetails';
+
 import{Navigation,
       Sun,
       CloudSun,
@@ -17,7 +19,15 @@ import{Navigation,
       CloudSunRain, 
       CloudMoonRain,
       Snowflake,
-      Wind,} from "./components/Icones"
+      Wind,
+      Compass,
+      Clock,
+      Sunrise,
+      Droplets,
+      Eye,
+      Gauge,
+      Thermometer
+    } from "./components/Icones"
 
 export default function Home() {
 
@@ -62,6 +72,9 @@ export default function Home() {
   const [desc, setDesc] = useState('None')
   const [WS, setWS] = useState(0)
   const [humidity, setHumidity] = useState(0)
+  const [uv, setUV] = useState<number>(0)
+  const [visibility, setVisibility] = useState<number>(0)
+  const [dew, setDew] = useState<number>(0)
   const [locationLoaded, setLocationLoaded] = useState(false);
 
   let WeatherIcon = iconCode in weathericones ? weathericones[iconCode as keyof typeof weathericones] : Cloud
@@ -75,6 +88,7 @@ export default function Home() {
       setLat(data.latitude)
       setCity(data.regionName)
       setCountry(data.countryName)
+      
       setLocationLoaded(true);
     })
   },[])
@@ -85,9 +99,10 @@ export default function Home() {
     if (!locationLoaded) return;
 
     fetch(currentWeatherEndpoint)
-    .then( responnse => responnse.json())
+    .then( response => response.json())
     .then( data => {
-  
+    
+    console.log(data)
     setMaxTemp(Math.round(data.main.temp_max))
     setMinTemp(Math.round(data.main.temp_min))
     setFeelsLike(Math.round(data.main.feels_like))
@@ -96,11 +111,70 @@ export default function Home() {
     setTemp(data.main.temp)
     setWS(data.wind.speed)
     setHumidity(data.main.humidity)
+    setVisibility(data.visibility)
     })
     
   }, [currentWeatherEndpoint, locationLoaded])
 
+  useEffect(()=>{
+    if (!locationLoaded) return;
+    fetch(`https://currentuvindex.com/api/v1/uvi?latitude=${lat}&longitude=${lon}`)
+    .then(response => response.json())
+    .then(data =>{
+      setUV(data.now.uvi)
+    })
+  })
+  function getUVLevel(uv:number) : string{
+    if(uv < 3) return "Low"
+    if(uv < 6) return "Moderate"
+    if(uv < 3) return "High"
+    if(uv < 11) return "Very High"
+
+    return "Extreme"
+  }
+  function getHumtyLevel(humidity:number) : string{
+    if(humidity < 30) return "Very Dry"
+    if(humidity < 40) return "Dry"
+    if(humidity < 61) return "Comfortable"
+    if(humidity < 71) return "Slightly Humid"
+    if(humidity < 81) return "Humid"
+    if(humidity < 101) return "Very Humid"
+
+    return "Very Humid"
+  }
+  function getDewPointLevel(dew: number): string {
+  if (dew < 10) return "Dry"
+  if (dew < 13) return "Comfortable"
+  if (dew < 16) return "Slightly Humid"
+  if (dew < 19) return "Humid"
+  if (dew < 22) return "Very Humid"
+  if (dew < 24) return "Oppressive"
+
+  return "Extremely Oppressive"
+}
+function getVisibilityLevel(visibility: number): string {
+  const km = visibility / 1000;
+
+  if (km < 1) return "Very Poor";
+  if (km < 4) return "Poor";
+  if (km < 10) return "Moderate";
+  if (km <= 20) return "Good";
+
+  return "Excellent";
+}
   const agora = new Date();
+
+  function calculatedDewPoint(temp:number, humidity:number) : number{
+    const gamma =
+    Math.log(humidity / 100) +
+    (17.625 * temp) / (243.04 + temp);
+
+    return (243.04 * gamma) / (17.625 - gamma);
+  }
+  useEffect(()=>{
+    setDew(Math.round(calculatedDewPoint(temp, humidity)))
+  }, [temp, humidity])
+  
   return (
       <>
         <Header/>
@@ -165,7 +239,7 @@ export default function Home() {
             
             <section className="grid lg:grid-cols-[1.5fr_1fr] gap-[25px] mt-[30px]">
               <section className="border rounded-3xl p-[25px]">
-                <Title subTitle= "Next 12 Hours" title = "Hourly forecast"/>
+                <Title subTitle= "Next 12 Hours" title = "Hourly forecast" icone={Clock}/>
                 <main>
 
                 </main>
@@ -177,10 +251,19 @@ export default function Home() {
 
           <section className="grid lg:grid-cols-[1.2fr_1.5fr] gap-[25px] mt-[30px]">
             <aside className="border rounded-3xl p-[25px]">
-              <Title subTitle= "Plan ahead" title = "7-day forecast"/>
+              <Title subTitle= "Plan ahead" title = "7-day forecast" icone={Compass}/>
             </aside>
+
             <aside className="border rounded-3xl p-[25px]">
-              <Title subTitle= "Atmosphere" title = "Weather details"/>
+              <Title subTitle= "Atmosphere" title = "Weather details" icone={CloudSun}/>
+              <aside className='grid lg:grid-cols-2 gap-x-[25px]'>
+
+                <WeatherDetails descricao='SW' icone={Wind} name='Wind' state={`${WS} km/h`}/>
+                <WeatherDetails descricao={getHumtyLevel(humidity)} icone={Droplets} name='Humidity' state={`${humidity}%`}/>
+                <WeatherDetails descricao={getVisibilityLevel(visibility)} icone={Eye} name='Visibility' state={`${visibility/1000} km`}/>
+                <WeatherDetails descricao={getUVLevel(uv)} icone={Sun} name='UV index' state={`${uv}`}/>
+                <WeatherDetails descricao={getDewPointLevel(dew)} icone={Thermometer} name='Dew point' state={`${dew}°`}/>
+              </aside>
             </aside>
           </section>
         </main>

@@ -1,6 +1,6 @@
-import { Sun } from 'lucide-react';
+import Title from './Title';
 import {useState, useEffect} from 'react';
-
+import {Sunrise, Sun } from 'lucide-react';
 type coordenadas = {
     latitude:number;
     longitude:number;
@@ -18,7 +18,7 @@ export default function Suncicle({latitude, longitude, hora}: coordenadas){
         fetch(endpoint)
         .then(response => response.json())
         .then( data=>{
-            console.log(data)
+            
             setSunRise(data.daily.sunrise[0].split('T')[1])
             setSunSet(data.daily.sunset[0].split('T')[1])
         })
@@ -65,32 +65,29 @@ export default function Suncicle({latitude, longitude, hora}: coordenadas){
     const y = Math.sqrt(1 - (x * 2 - 1) ** 2);
 
     return(
-        <main className="border rounded-3xl p-[25px] overflow-hidden">
-            <header >
-                  <div className="uppercase text-[0.75rem] lg:text-[0.8rem] font-medium tracking-widest text-(--cor-borda) mb-[10px]">Daylight</div>
-                  <h1 className="text-white font-bold  text-[1.13rem] lg:text-[1.5rem]  font-(family-name:--font-space-grotesk) mb-[25px]">Sun cycle</h1>
-            </header>
-                <main className="flex justify-between items-center ">
-                    <div className='flex flex-col'>
-                        <span className='text-[0.75rem] lg:text-[0.8rem] tracking-widest text-(--cor-borda) mb-[10px]'>Sunrise</span>
-                        <span className='text-white font-bold'>{sunRise !== null && <p>{formatHour(sunRise)}</p>}</span>
-                    </div>
-                    <div className=' relative h-28  w-[45%] md:w-[60%] overflow-hidden'>
+        <main className="border rounded-3xl p-[25px] ">
+            <Title subTitle='Daylight' title='Sun cycle' icone={Sunrise}/>
+            <main className="flex justify-between items-center ">
+                <div className='flex flex-col'>
+                    <span className='text-[0.75rem] lg:text-[0.8rem] tracking-widest text-(--cor-borda) mb-[10px]'>Sunrise</span>
+                    <span className='text-white font-bold'>{sunRise !== null && <p>{formatHour(sunRise)}</p>}</span>
+                </div>
+                <div className=' relative h-28  w-[45%] md:w-[60%] overflow-hidden'>
 
-                        <div className="absolute left-[0%] right-[0%] top-[2rem] h-36 rounded-[50%] border-t-2  border-(--cor-amarelo-sol)"/>
-                        
-                        <Sun className="absolute   text-(--cor-amarelo-sol)"
-                            // style={{left:`${position}%`}}
-                            style={{offsetPath: "path('M 0 100 Q 150 0 300 100')",
-                                    offsetDistance: `90%`,}}
-                            size={30}
-                        />
-                    </div>
-                    <div className='text-right'>
-                        <span className='text-[0.75rem] lg:text-[0.8rem] tracking-widest text-(--cor-borda) mb-[10px]'>Sunset</span>
-                        <span className='text-white font-bold'>{sunSet !== null && <p>{formatHour(sunSet)}</p>}</span>
-                    </div>
-                </main>
+                    <div className="absolute left-[0%] right-[0%] top-[2rem] h-36 rounded-[50%] border-t-2  border-(--cor-amarelo-sol)"/>
+                    
+                    <Sun className="absolute   text-(--cor-amarelo-sol)"
+                        // style={{left:`${position}%`}}
+                        style={{offsetPath: "path('M 0 100 Q 150 0 300 100')",
+                                offsetDistance: `40%`,}}
+                        size={30}
+                    />
+                </div>
+                <div className='text-right'>
+                    <span className='text-[0.75rem] lg:text-[0.8rem] tracking-widest text-(--cor-borda) mb-[10px]'>Sunset</span>
+                    <span className='text-white font-bold'>{sunSet !== null && <p>{formatHour(sunSet)}</p>}</span>
+                </div>
+            </main>
         </main>
     )
 }

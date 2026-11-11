@@ -14,5 +14,12 @@ export {
     Search,
     LocateFixed,
     MapPin,
-    Navigation,   
+    Navigation,
+    Compass,
+    Clock,
+    Sunrise,
+    Droplets,
+    Eye,
+    Gauge,
+    Thermometer
 } from "lucide-react";
