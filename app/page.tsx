@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import Header from "./components/Header";
 import Suncicle from "./components/Suncicle";
 import Title from "./components/Title";
+import CardDays from './components/CardDays';
 import WeatherDetails from './components/WeatherDetails';
 
 import{Navigation,
@@ -56,10 +57,23 @@ export default function Home() {
     '13d': Snowflake,
     '13n': Snowflake,
   }
+  const week = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
 
-  const locationEndpoint : string = 'https://free.freeipapi.com/api/v1/json'
-  const APIKey : string = 'acd126cb1b8c63520fa45c6f0f32164a'
+  const agora = new Date();
 
+  const todayIndex = agora.getDay();
+
+  const days = Array.from({ length: 5 }, (_, index) => {
+    return week[(todayIndex + 1 + index) % 7];
+  });
   const [city, setCity] = useState('None')
   const [country, setCountry] = useState('None')
   const [lat, setLat] = useState(-23.5505)
@@ -80,7 +94,7 @@ export default function Home() {
   let WeatherIcon = iconCode in weathericones ? weathericones[iconCode as keyof typeof weathericones] : Cloud
 
   useEffect(()=>{
-    fetch(locationEndpoint)
+    fetch('https://free.freeipapi.com/api/v1/json')
     .then( responnse => responnse.json())
     .then( data => {
 
@@ -93,7 +107,7 @@ export default function Home() {
     })
   },[])
 
-  const currentWeatherEndpoint : string = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${APIKey}`
+  const currentWeatherEndpoint : string = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=acd126cb1b8c63520fa45c6f0f32164a`
 
   useEffect(()=>{
     if (!locationLoaded) return;
@@ -162,7 +176,7 @@ function getVisibilityLevel(visibility: number): string {
 
   return "Excellent";
 }
-  const agora = new Date();
+  
 
   function calculatedDewPoint(temp:number, humidity:number) : number{
     const gamma =
@@ -175,6 +189,38 @@ function getVisibilityLevel(visibility: number): string {
     setDew(Math.round(calculatedDewPoint(temp, humidity)))
   }, [temp, humidity])
   
+  const weatherDetails = [
+    {
+        descricao: 'SW',
+        icone: Wind,
+        name: 'Wind',
+        state: `${WS} km/h`
+    },
+    {
+        descricao: getHumtyLevel(humidity),
+        icone: Droplets,
+        name: 'Humidity',
+        state: `${humidity}%`
+    },
+    {
+        descricao: getVisibilityLevel(visibility),
+        icone: Eye,
+        name: 'Visibility',
+        state: `${visibility / 1000} km`
+    },
+    {
+        descricao: getUVLevel(uv),
+        icone: Sun,
+        name: 'UV index',
+        state: `${uv}`
+    },
+    {
+        descricao: getDewPointLevel(dew),
+        icone: Thermometer,
+        name: 'Dew point',
+        state: `${dew}°`
+    }
+];
   return (
       <>
         <Header/>
@@ -237,7 +283,7 @@ function getVisibilityLevel(visibility: number): string {
               <h1 className="text-white font-bold text-[1.5rem] lg:text-[2.5rem] font-(family-name:--font-space-grotesk)">The next few hours</h1>
             </header>
             
-            <section className="grid lg:grid-cols-[1.5fr_1fr] gap-[25px] mt-[30px]">
+            <section className="grid lg:grid-cols-[1.5fr_1fr] md:grid-cols-[1fr_1fr] gap-[25px] mt-[30px]">
               <section className="border rounded-3xl p-[25px]">
                 <Title subTitle= "Next 12 Hours" title = "Hourly forecast" icone={Clock}/>
                 <main>
@@ -249,20 +295,28 @@ function getVisibilityLevel(visibility: number): string {
             </section>
           </section>
 
-          <section className="grid lg:grid-cols-[1.2fr_1.5fr] gap-[25px] mt-[30px]">
+          <section className="grid lg:grid-cols-[1fr_2fr] gap-[25px] mt-[30px]">
             <aside className="border rounded-3xl p-[25px]">
               <Title subTitle= "Plan ahead" title = "7-day forecast" icone={Compass}/>
+              <aside className='mt-[45px]'>
+                {Array.from({ length: 7 }).map((_, index) => (
+                  <CardDays key={index} />
+                ))}
+              </aside>
             </aside>
 
             <aside className="border rounded-3xl p-[25px]">
               <Title subTitle= "Atmosphere" title = "Weather details" icone={CloudSun}/>
               <aside className='grid lg:grid-cols-2 gap-x-[25px]'>
-
-                <WeatherDetails descricao='SW' icone={Wind} name='Wind' state={`${WS} km/h`}/>
-                <WeatherDetails descricao={getHumtyLevel(humidity)} icone={Droplets} name='Humidity' state={`${humidity}%`}/>
-                <WeatherDetails descricao={getVisibilityLevel(visibility)} icone={Eye} name='Visibility' state={`${visibility/1000} km`}/>
-                <WeatherDetails descricao={getUVLevel(uv)} icone={Sun} name='UV index' state={`${uv}`}/>
-                <WeatherDetails descricao={getDewPointLevel(dew)} icone={Thermometer} name='Dew point' state={`${dew}°`}/>
+                {weatherDetails.map((detail) => (
+                    <WeatherDetails
+                        key={detail.name}
+                        descricao={detail.descricao}
+                        icone={detail.icone}
+                        name={detail.name}
+                        state={detail.state}
+                    />
+                ))}
               </aside>
             </aside>
           </section>
